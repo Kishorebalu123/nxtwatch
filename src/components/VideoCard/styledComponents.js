@@ -1,14 +1,21 @@
 import styled from 'styled-components'
 
-export const EachVideo = styled.li``
+export const EachVideo = styled.li`
+  @media screen and (min-width: 576px) {
+    max-width: 280px;
+    margin: 20px 10px 20px 15px;
+  }
+`
 
 export const ThumbnailImage = styled.img`
   width: 100vw;
+  @media screen and (min-width: 576px) {
+    width: 280px;
+  }
 `
 
 export const DetailsCard = styled.div`
   display: flex;
-
   margin: 10px 10px 20px 10px;
 `
 
@@ -24,14 +31,40 @@ export const ProfileLogo = styled.img`
 
 export const Title = styled.p`
   margin: 0;
-  font-size: 18px;
+  font-size: 15px;
 `
-export const Paragraph = styled.div`
+export const Paragraph = styled.ul`
   display: flex;
+  color: #606060;
+  padding: 0;
+  list-style-type: disc;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  width: 80%;
+  align-items: center;
+  @media screen and (min-width: 576px) {
+    width: 70%;
+  }
 `
 
-export const ChannelName = styled.p``
+export const ChannelName = styled.li`
+  list-style-type: none;
+  font-size: 12px;
+  @media screen and (min-width: 576px) {
+    margin-right: 90px;
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+`
 
-export const Views = styled.p``
+export const Views = styled.li`
+  font-size: 12px;
+  @media screen and (min-width: 576px) {
+    list-style-type: none;
+  }
+`
 
-export const PublishedAt = styled.p``
+export const PublishedAt = styled.li`
+  font-size: 12px;
+`

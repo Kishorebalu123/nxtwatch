@@ -4,11 +4,15 @@ import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
 
 import {GrClose} from 'react-icons/gr'
-import {AiOutlineSearch} from 'react-icons/ai'
+import {AiOutlineSearch, AiFillHome} from 'react-icons/ai'
+import {HiFire} from 'react-icons/hi'
+import {SiYoutubegaming} from 'react-icons/si'
+import {MdPlaylistAdd} from 'react-icons/md'
 
 import Header from '../Header'
 import Mode from '../Mode'
 import VideoCard from '../VideoCard'
+import CategoryCard from '../CategoryCard'
 
 import {
   MainContainer,
@@ -21,9 +25,22 @@ import {
   SearchContainer,
   SearchInput,
   SearchBtn,
+  VideosSection,
   VideosContainer,
   VideosList,
+  SideBar,
+  Categories,
+  EachCategory,
+  CategoryButton,
+  Card,
 } from './styledComponents'
+
+const categoriesList = [
+  {id: '1', name: 'Home'},
+  {id: '2', name: 'Trending'},
+  {id: '3', name: 'Gaming'},
+  {id: '4', name: 'Saved videos'},
+]
 
 const apiConstants = {
   initial: 'INITIAL',
@@ -153,38 +170,68 @@ class Home extends Component {
   }
 
   renderVideosSection = () => (
-    <>
-      <SearchContainer>
-        <SearchInput
-          type="text"
-          placeholder="Search"
-          onChange={this.changeInput}
-        />
-        <SearchBtn onClick={this.searchResults} type="button">
-          <AiOutlineSearch />
-        </SearchBtn>
-      </SearchContainer>
-      <VideosContainer>{this.renderVideos()}</VideosContainer>
-    </>
+    <Mode.Consumer>
+      {value => {
+        const {darkMode} = value
+        return (
+          <VideosSection mode={darkMode}>
+            <SearchContainer>
+              <SearchInput
+                mode={darkMode}
+                type="text"
+                placeholder="Search"
+                onChange={this.changeInput}
+              />
+              <SearchBtn
+                mode={darkMode}
+                onClick={this.searchResults}
+                type="button"
+              >
+                <AiOutlineSearch />
+              </SearchBtn>
+            </SearchContainer>
+            <VideosContainer>{this.renderVideos()}</VideosContainer>
+          </VideosSection>
+        )
+      }}
+    </Mode.Consumer>
+  )
+
+  renderSideBar = () => (
+    <Categories>
+      <EachCategory>
+        <AiFillHome />
+        <CategoryButton type="button">Home</CategoryButton>
+      </EachCategory>
+      <EachCategory>
+        <HiFire />
+        <CategoryButton type="button">Trending</CategoryButton>
+      </EachCategory>
+      <EachCategory>
+        <SiYoutubegaming />
+        <CategoryButton type="button">Gaming</CategoryButton>
+      </EachCategory>
+      <EachCategory>
+        <MdPlaylistAdd />
+        <CategoryButton type="button">Saved videos</CategoryButton>
+      </EachCategory>
+    </Categories>
   )
 
   render() {
     const {dar} = this.state
+
     return (
-      <Mode.Consumer>
-        {value => {
-          const {darkMode} = value
-          return (
-            <MainContainer>
-              <Header />
-              <HomeContainer>
-                {this.renderPremiumCard()}
-                {this.renderVideosSection()}
-              </HomeContainer>
-            </MainContainer>
-          )
-        }}
-      </Mode.Consumer>
+      <MainContainer>
+        <Header />
+        <HomeContainer>
+          <SideBar>{this.renderSideBar()}</SideBar>
+          <Card>
+            {this.renderPremiumCard()}
+            {this.renderVideosSection()}
+          </Card>
+        </HomeContainer>
+      </MainContainer>
     )
   }
 }
