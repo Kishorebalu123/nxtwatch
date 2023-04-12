@@ -3,7 +3,7 @@ import {Component} from 'react'
 import {Redirect} from 'react-router-dom'
 import Cookies from 'js-cookie'
 
-import Mode from '../Mode'
+import ModeContext from '../../context/ModeContext'
 
 import {
   MainContainer,
@@ -73,7 +73,7 @@ class Login extends Component {
   }
 
   renderPassword = () => (
-    <Mode.Consumer>
+    <ModeContext.Consumer>
       {value => {
         const {darkMode} = value
         const {password, showPassword} = this.state
@@ -94,11 +94,11 @@ class Login extends Component {
           </>
         )
       }}
-    </Mode.Consumer>
+    </ModeContext.Consumer>
   )
 
   renderUsername = () => (
-    <Mode.Consumer>
+    <ModeContext.Consumer>
       {value => {
         const {darkMode} = value
         const {username} = this.state
@@ -118,11 +118,11 @@ class Login extends Component {
           </>
         )
       }}
-    </Mode.Consumer>
+    </ModeContext.Consumer>
   )
 
   renderShowPassword = () => (
-    <Mode.Consumer>
+    <ModeContext.Consumer>
       {value => {
         const {darkMode} = value
         return (
@@ -134,7 +134,7 @@ class Login extends Component {
           </>
         )
       }}
-    </Mode.Consumer>
+    </ModeContext.Consumer>
   )
 
   render() {
@@ -144,7 +144,7 @@ class Login extends Component {
       return <Redirect to="/" />
     }
     return (
-      <Mode.Consumer>
+      <ModeContext.Consumer>
         {value => {
           const {darkMode} = value
           return (
@@ -156,7 +156,7 @@ class Login extends Component {
                       ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-dark-theme-img.png'
                       : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png'
                   }
-                  alt=""
+                  alt="website logo"
                 />
                 <FormContainer onSubmit={this.SubmitForm}>
                   <Username>{this.renderUsername()}</Username>
@@ -171,7 +171,7 @@ class Login extends Component {
             </MainContainer>
           )
         }}
-      </Mode.Consumer>
+      </ModeContext.Consumer>
     )
   }
 }

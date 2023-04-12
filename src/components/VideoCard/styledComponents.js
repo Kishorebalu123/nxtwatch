@@ -3,14 +3,14 @@ import styled from 'styled-components'
 export const EachVideo = styled.li`
   @media screen and (min-width: 576px) {
     max-width: 280px;
-    margin: 20px 10px 20px 15px;
+    margin: 20px 30px 20px 15px;
   }
 `
 
 export const ThumbnailImage = styled.img`
   width: 100vw;
   @media screen and (min-width: 576px) {
-    width: 280px;
+    width: 300px;
   }
 `
 
@@ -31,9 +31,10 @@ export const ProfileLogo = styled.img`
 
 export const Title = styled.p`
   margin: 0;
+  color: ${props => (props.mode ? '#ffffff' : '#000000')};
   font-size: 15px;
 `
-export const Paragraph = styled.ul`
+export const Paragraph = styled.div`
   display: flex;
   color: #606060;
   padding: 0;
@@ -48,8 +49,7 @@ export const Paragraph = styled.ul`
   }
 `
 
-export const ChannelName = styled.li`
-  list-style-type: none;
+export const ChannelName = styled.p`
   font-size: 12px;
   @media screen and (min-width: 576px) {
     margin-right: 90px;
@@ -58,13 +58,13 @@ export const ChannelName = styled.li`
   }
 `
 
-export const Views = styled.li`
+export const Views = styled.p`
   font-size: 12px;
   @media screen and (min-width: 576px) {
     list-style-type: none;
   }
 `
 
-export const PublishedAt = styled.li`
+export const PublishedAt = styled.p`
   font-size: 12px;
 `

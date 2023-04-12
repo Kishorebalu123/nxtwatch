@@ -4,15 +4,12 @@ import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
 
 import {GrClose} from 'react-icons/gr'
-import {AiOutlineSearch, AiFillHome} from 'react-icons/ai'
-import {HiFire} from 'react-icons/hi'
-import {SiYoutubegaming} from 'react-icons/si'
-import {MdPlaylistAdd} from 'react-icons/md'
+import {AiOutlineSearch} from 'react-icons/ai'
 
 import Header from '../Header'
-import Mode from '../Mode'
+import ModeContext from '../../context/ModeContext'
 import VideoCard from '../VideoCard'
-import CategoryCard from '../CategoryCard'
+import SideBar from '../SideBar'
 
 import {
   MainContainer,
@@ -28,19 +25,19 @@ import {
   VideosSection,
   VideosContainer,
   VideosList,
-  SideBar,
-  Categories,
-  EachCategory,
-  CategoryButton,
   Card,
+  SideCard,
+  NoVideosView,
+  NoResultsImage,
+  NoResultsFound,
+  Paragraph,
+  Retry,
+  FailureContainer,
+  FailureImage,
+  Heading,
+  Content,
+  RetryBtn,
 } from './styledComponents'
-
-const categoriesList = [
-  {id: '1', name: 'Home'},
-  {id: '2', name: 'Trending'},
-  {id: '3', name: 'Gaming'},
-  {id: '4', name: 'Saved videos'},
-]
 
 const apiConstants = {
   initial: 'INITIAL',
@@ -53,7 +50,6 @@ class Home extends Component {
   state = {
     apiStatus: apiConstants.initial,
     searchInput: '',
-    dar: true,
     showPremiumCard: true,
     videosData: [],
   }
@@ -63,40 +59,36 @@ class Home extends Component {
   }
 
   getVideosApi = async () => {
-    try {
-      const token = Cookies.get('jwt_token')
-      const {searchInput} = this.state
-      this.setState({apiStatus: apiConstants.inProgress})
-      const options = {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-      const url = `https://apis.ccbp.in/videos/all?search=${searchInput}`
+    const token = Cookies.get('jwt_token')
+    const {searchInput} = this.state
+    this.setState({apiStatus: apiConstants.inProgress})
+    const options = {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+    const url = `https://apis.ccbp.in/videos/all?search=${searchInput}`
 
-      const response = await fetch(url, options)
-      const data = await response.json()
-      console.log(data)
-      if (response.ok) {
-        const updatedData = data.videos.map(eachItem => ({
-          id: eachItem.id,
-          title: eachItem.title,
-          thumbnailUrl: eachItem.thumbnail_url,
-          viewCount: eachItem.view_count,
-          publishedAt: eachItem.published_at,
-          channelName: eachItem.channel.name,
-          profileImageUrl: eachItem.channel.profile_image_url,
-        }))
-        this.setState({
-          videosData: updatedData,
-          apiStatus: apiConstants.success,
-        })
-      } else {
-        this.setState({apiStatus: apiConstants.failure})
-      }
-    } catch (error) {
-      console.log(error.message)
+    const response = await fetch(url, options)
+    const data = await response.json()
+    //    console.log(data)
+    if (response.ok) {
+      const updatedData = data.videos.map(eachItem => ({
+        id: eachItem.id,
+        title: eachItem.title,
+        thumbnailUrl: eachItem.thumbnail_url,
+        viewCount: eachItem.view_count,
+        publishedAt: eachItem.published_at,
+        channelName: eachItem.channel.name,
+        profileImageUrl: eachItem.channel.profile_image_url,
+      }))
+      this.setState({
+        videosData: updatedData,
+        apiStatus: apiConstants.success,
+      })
+    } else {
+      this.setState({apiStatus: apiConstants.failure})
     }
   }
 
@@ -108,13 +100,15 @@ class Home extends Component {
     const {showPremiumCard} = this.state
     return (
       showPremiumCard && (
-        <PremiumContainer>
+        <PremiumContainer data-testid="banner">
           <ImageCard>
             <PremiumLogo
               src="https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png"
-              alt=""
+              alt="nxt watch logo"
             />
-            <GrClose onClick={this.closeBtn} />
+            <button type="button" data-testid="close" onClick={this.closeBtn}>
+              <GrClose />
+            </button>
           </ImageCard>
           <AboutPremium>
             Buy Nxt Watch Premium prepaid plans with UPI
@@ -132,19 +126,54 @@ class Home extends Component {
   )
 
   renderFailureView = () => (
-    <div>
-      <h1>failureView</h1>
-    </div>
+    <ModeContext>
+      {value => {
+        const {darkMode} = value
+        return (
+          <FailureContainer>
+            <FailureImage
+              src={
+                darkMode
+                  ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-dark-theme-img.png'
+                  : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
+              }
+              alt="failure view"
+            />
+            <Heading>Oops! Something Went Wrong</Heading>
+            <Content>
+              We are having some trouble to complete your request. Please try
+              again
+            </Content>
+            <RetryBtn type="button" onClick={this.getVideosApi}>
+              Retry
+            </RetryBtn>
+          </FailureContainer>
+        )
+      }}
+    </ModeContext>
   )
 
   renderSuccessView = () => {
     const {videosData} = this.state
-    return (
+    const view = videosData.length > 0
+    return view ? (
       <VideosList>
         {videosData.map(eachVideo => (
           <VideoCard videoData={eachVideo} key={eachVideo.id} />
         ))}
       </VideosList>
+    ) : (
+      <NoVideosView>
+        <NoResultsImage
+          src="https://assets.ccbp.in/frontend/react-js/nxt-watch-no-search-results-img.png"
+          alt="no videos"
+        />
+        <NoResultsFound>No Search results found</NoResultsFound>
+        <Paragraph>Try different key words or remove search filter</Paragraph>
+        <Retry onClick={() => this.getVideosApi} type="button">
+          Retry
+        </Retry>
+      </NoVideosView>
     )
   }
 
@@ -166,26 +195,42 @@ class Home extends Component {
   }
 
   changeInput = event => {
-    this.setState({SearchInput: event.target.value})
+    this.setState({searchInput: event.target.value})
+  }
+
+  searchResults = () => {
+    const {searchInput, videosData} = this.state
+    let filteredVideos
+    if (searchInput !== '') {
+      filteredVideos = videosData.filter(eachVideo =>
+        eachVideo.title.includes(searchInput),
+      )
+      this.setState({videosData: filteredVideos}, this.getVideosApi)
+    } else {
+      this.getVideosApi()
+    }
   }
 
   renderVideosSection = () => (
-    <Mode.Consumer>
+    <ModeContext.Consumer>
       {value => {
         const {darkMode} = value
+        const {searchInput} = this.state
         return (
           <VideosSection mode={darkMode}>
             <SearchContainer>
               <SearchInput
                 mode={darkMode}
-                type="text"
+                type="search"
                 placeholder="Search"
+                value={searchInput}
                 onChange={this.changeInput}
               />
               <SearchBtn
                 mode={darkMode}
                 onClick={this.searchResults}
                 type="button"
+                data-testid="searchButton"
               >
                 <AiOutlineSearch />
               </SearchBtn>
@@ -194,44 +239,30 @@ class Home extends Component {
           </VideosSection>
         )
       }}
-    </Mode.Consumer>
-  )
-
-  renderSideBar = () => (
-    <Categories>
-      <EachCategory>
-        <AiFillHome />
-        <CategoryButton type="button">Home</CategoryButton>
-      </EachCategory>
-      <EachCategory>
-        <HiFire />
-        <CategoryButton type="button">Trending</CategoryButton>
-      </EachCategory>
-      <EachCategory>
-        <SiYoutubegaming />
-        <CategoryButton type="button">Gaming</CategoryButton>
-      </EachCategory>
-      <EachCategory>
-        <MdPlaylistAdd />
-        <CategoryButton type="button">Saved videos</CategoryButton>
-      </EachCategory>
-    </Categories>
+    </ModeContext.Consumer>
   )
 
   render() {
-    const {dar} = this.state
-
     return (
-      <MainContainer>
-        <Header />
-        <HomeContainer>
-          <SideBar>{this.renderSideBar()}</SideBar>
-          <Card>
-            {this.renderPremiumCard()}
-            {this.renderVideosSection()}
-          </Card>
-        </HomeContainer>
-      </MainContainer>
+      <ModeContext.Consumer>
+        {value => {
+          const {darkMode} = value
+          return (
+            <MainContainer mode={darkMode} data-testid="home">
+              <Header />
+              <HomeContainer>
+                <SideCard>
+                  <SideBar />
+                </SideCard>
+                <Card>
+                  {this.renderPremiumCard()}
+                  {this.renderVideosSection()}
+                </Card>
+              </HomeContainer>
+            </MainContainer>
+          )
+        }}
+      </ModeContext.Consumer>
     )
   }
 }

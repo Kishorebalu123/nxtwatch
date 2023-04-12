@@ -2,19 +2,20 @@ import styled from 'styled-components'
 
 export const MainContainer = styled.div`
   max-height: 100vh;
+  background-color: ${props => (props.mode ? '#181818' : '#f9f9f9')};
 `
 export const HomeContainer = styled.div`
   display: flex;
 `
-export const SideBar = styled.div`
-  min-width: 150px;
-  @media screen and (max-width: 768px) {
+export const SideCard = styled.div`
+  @media screen and (max-width: 767px) {
     display: none;
   }
 `
 export const Card = styled.div`
   overflow-y: auto;
-  max-height: 700px;
+  height: 100vh;
+  width: 100vw;
 `
 export const PremiumContainer = styled.div`
   padding: 30px 40px 0px 30px;
@@ -50,7 +51,6 @@ export const GetItNow = styled.button`
 `
 export const VideosSection = styled.div`
   background-color: ${props => props.mode && '#181818'};
-
   color: ${props => props.mode && '#ffffff'};
 `
 export const VideosContainer = styled.div``
@@ -83,7 +83,8 @@ export const SearchInput = styled.input`
   padding-left: 20px;
   outline: none;
   border-color: ${props => props.mode && '#424242'};
-  background-color: ${props => props.mode && '#181818'};
+  background-color: ${props => (props.mode ? '#181818' : '#f9f9f9')};
+  color: ${props => props.mode && '#ffffff'};
 `
 
 export const VideosList = styled.ul`
@@ -95,12 +96,12 @@ export const VideosList = styled.ul`
     flex-wrap: wrap;
   }
 `
-export const Categories = styled.div`
+export const Categories = styled.ul`
   padding: 10px;
   color: red;
 `
 export const EachCategory = styled.div`
-  margin-bottom: 10px;
+  margin-bottom: 1px;
   color: #606060;
 `
 export const CategoryButton = styled.button`
@@ -108,3 +109,39 @@ export const CategoryButton = styled.button`
   border: 0;
   background-color: transparent;
 `
+export const NoVideosView = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+export const NoResultsImage = styled.img`
+  height: 200px;
+  width: 250px;
+  margin-bottom: 20px;
+`
+
+export const NoResultsFound = styled.p`
+  font-size: 20px;
+  font-weight: 500;
+`
+
+export const Paragraph = styled.p`
+  color: gray;
+  font-size: 18px;
+`
+
+export const Retry = styled.button`
+  height: 40px;
+  width: 90px;
+  border: 0;
+  background-color: #4f46e5;
+  color: #ffffff;
+  border-radius: 5px;
+  margin-bottom: 20px;
+`
+export const FailureContainer = styled.div``
+export const FailureImage = styled.img``
+export const Heading = styled.h1``
+export const Content = styled.p``
+export const RetryBtn = styled.button``
