@@ -21,7 +21,6 @@ export const PremiumContainer = styled.div`
   padding: 30px 40px 0px 30px;
   margin-bottom: 40px;
   background-size: cover;
-
   @media screen and (min-width: 576px) {
     background-image: url('https://assets.ccbp.in/frontend/react-js/nxt-watch-banner-bg.png');
     background-position: 5rem;
@@ -59,7 +58,6 @@ export const SearchContainer = styled.div`
   display: flex;
   margin: 0px 20px 20px 20px;
   padding-top: 20px;
-
   @media screen and (min-width: 576px) {
     max-width: 450px;
   }
@@ -90,7 +88,6 @@ export const SearchInput = styled.input`
 export const VideosList = styled.ul`
   list-style-type: none;
   padding: 0;
-
   @media screen and (min-width: 576px) {
     display: flex;
     flex-wrap: wrap;

@@ -20,8 +20,6 @@ import {
 } from './styledComponents'
 
 class SavedVideos extends Component {
-  state = {kk: true}
-
   render() {
     return (
       <ModeContext.Consumer>

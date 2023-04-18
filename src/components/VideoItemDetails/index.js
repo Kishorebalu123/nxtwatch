@@ -16,7 +16,6 @@ import {
   MainContainer,
   VideoDetailsContainer,
   ReactPlayerContainer,
-  DetailsContainer,
   Title,
   ViewsContainer,
   Views,
@@ -178,7 +177,6 @@ class VideoItemDetails extends Component {
       profileImageUrl,
       publishedAt,
       subscriberCount,
-      thumbnailUrl,
       videoUrl,
       viewCount,
     } = videoData
@@ -186,8 +184,8 @@ class VideoItemDetails extends Component {
     return (
       <ModeContext.Consumer>
         {value => {
-          const {darkMode, addToSavedVideos, savedVideos} = value
-          const {searchInput, isLiked, isDisLiked} = this.state
+          const {addToSavedVideos, savedVideos} = value
+          const {isLiked, isDisLiked} = this.state
           const onSave = () => {
             addToSavedVideos(videoData)
           }

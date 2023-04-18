@@ -19,14 +19,10 @@ import {
   WebsiteLogo,
   Menu,
   Profile,
-  LogoutBtn,
-  Logout,
   ModeBtn,
 } from './styledComponents'
 
 class Header extends Component {
-  state = {show: false}
-
   logoutBtn = () => {
     const {history} = this.props
     Cookies.remove('jwt_token')
@@ -34,7 +30,6 @@ class Header extends Component {
   }
 
   render() {
-    const {show} = this.state
     return (
       <ModeContext.Consumer>
         {value => {
